@@ -3,18 +3,7 @@ session_start();
 include "../connection.php";
 global $conn;
 include "../!NAVBAR/navbar-homeless.php";
-$user_id = $_SESSION['user_id'];
-if (isset($_COOKIE['points'])) {
-    $points = $_COOKIE['points'];
-    $statement_points = $conn->prepare("UPDATE USERS_LEVELS SET experience_points = experience_points + :points, all_time_experience_points = all_time_experience_points + :points WHERE user_id = :user_id");
-    $statement_points->bindParam(':points', $points);
-    $statement_points->bindParam(':user_id', $user_id);
-    $statement_points->execute();
-    setcookie('points', '', time() - 3600, '/');
-
-
-
-}
+include "../updatePointsAndLevel.php";
 ?>
 
 

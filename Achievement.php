@@ -1,11 +1,8 @@
 <?php
 
-class Achievement {
+interface Achievement {
 
-    private $id;
-    private $name;
-    private $description;
 
-    private $requirments;
-
+    function grantAchievement($achievement_id, $user_id);
+    function deleteAchieveement($achievement_id, $user_id);
 }
