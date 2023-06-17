@@ -7,7 +7,7 @@
 <body>
 <nav>
     <a href="../3PLAY/play.php">Graj</a>
-    <a href="#">Profil</a>
+    <a href="../6PROFILE/profile.php">Profil</a>
     <a href="#">Sklep</a>
     <a href="#">Rankingi</a>
     <a href="#">Ustawienia</a>
