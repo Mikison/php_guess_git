@@ -5,6 +5,15 @@ $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
 global $conn;
+function console_log($data)
+{
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
+
 
 $statment_to_get_stats = $conn->prepare("SELECT all_time_experience_points, level, champion_guessed FROM USERS_LEVELS WHERE user_id = :user_id;");
 $statment_to_get_stats->bindParam(':user_id', $user_id);
@@ -16,7 +25,7 @@ $all_time_experience_ponts = $result['all_time_experience_points'];
 $level = $result['level'];
 $champion_guessed = $result['champion_guessed'];
 
-
+$avatar_name = $_COOKIE['avatar'] ?? 'icons/default.png';
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +66,7 @@ $champion_guessed = $result['champion_guessed'];
             height: 150px;
             border-radius: 50%;
             margin: 0 auto 20px;
-            background-image: url("avatars/default.png");
+            background-image: url("<?php echo $avatar_name ?>");
             background-size: cover;
             background-position: center;
             background-color: #555;

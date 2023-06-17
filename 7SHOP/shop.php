@@ -8,28 +8,56 @@ include "../connection.php";
 checkTable();
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
     $item_id = $_GET["item_id"];
+    // Pobranie odpowiedniego itemka z SQL i zapisanie jego ceny do zmiennej
     $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
     $getItemPrice_sql->bindParam('item_id', $item_id);
     $getItemPrice_sql->execute();
     $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
+
+    //Zmienne
     $price_in_points = $rows['price'];
-
-
+    $category = $rows['category'];
+    $icon = $rows['icon'];
+    // Zabranie za kupioną rzecz punktów użytkownikowi
     $statement_points = $conn->prepare("UPDATE USERS_LEVELS SET experience_points = experience_points - :points  WHERE user_id = :user_id");
     $statement_points->bindParam(':points', $price_in_points);
     $statement_points->bindParam(':user_id', $user_id);
     $statement_points->execute();
-
-
+    // Wpisanie w bazę danych zakupu użytkownika
     $statment_insert_purchases = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id) VALUES (:user_id, :item_id)");
     $statment_insert_purchases->bindParam(':user_id', $user_id);
     $statment_insert_purchases->bindParam(':item_id', $item_id);
     $statment_insert_purchases->execute();
 
+    if ($category == 'Avatar') {
+        setcookie('avatar', $icon, time() + 60 * 60 * 24 * 7, '/');
+    }
+
 
     header("Location: ../7SHOP/shop.php");
     exit();
+} elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["select_item_id"])) {
+    $selectItemId = $_GET["select_item_id"];
+    $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
+    $getItemPrice_sql->bindParam('item_id', $selectItemId);
+    $getItemPrice_sql->execute();
+    $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
+
+    $category = $rows['category'];
+    $icon = $rows['icon'];
+    if ($category == 'Avatar') {
+        setcookie('avatar', $icon, time() + 60 * 60 * 24 * 7, '/');
+    } elseif ($category == 'Theme') {
+        setcookie('theme', $icon, time() + 60 * 60 * 24 * 7, '/');
+    } else {
+        setcookie('champs', 'yes', time() + 60 * 60 * 24 * 7, '/');
+    }
+    header("Location: ../7SHOP/shop.php");
+    exit();
 }
+
+
+
 function checkTable() {
     global $conn;
     $check_table_statement = "SHOW TABLES LIKE 'SHOP_ITEMS'";
@@ -47,11 +75,11 @@ function checkTable() {
 
 
         $stmt = $conn->prepare("INSERT INTO SHOP_ITEMS (name, price, icon, category) VALUES
-        ('Bober', 500, 'icons/bober.jpeg', 'Avatary'),
-        ('Wiewiór', 2000, 'icons/wiewiór.gif', 'Avatary'),
-        ('Motyw Biały', 1000, 'icons/white.png', 'Motywy'),
-        ('Motyw Kolor', 5000, 'icons/rainbow.png', 'Motywy'),
-        ('Zestaw Postaci', 3000, 'characters/character1.png', 'Postacie')
+        ('Bober', 500, 'icons/bober.jpeg', 'Avatar'),
+        ('Wiewiór', 2000, 'icons/wiewiór.gif', 'Avatar'),
+        ('Motyw Biały', 1000, 'icons/white.png', 'Theme'),
+        ('Motyw Kolor', 5000, 'icons/rainbow.png', 'Theme'),
+        ('Zestaw Postaci', 3000, 'characters/character1.png', 'Champions')
 ");
         $stmt->execute();
     }
@@ -150,10 +178,10 @@ $user_points_to_spend = $result_statment['experience_points'];
             flex-direction: column;
             align-items: center;
             width: 300px;
-            height: 250px;
+            height: 275px;
             padding: 10px;
             background-color: #1a1a1a;
-            border-radius: 5px;
+            border-radius: 20px;
             margin-right: 10px;
             margin-bottom: 10px;
         }
@@ -164,7 +192,7 @@ $user_points_to_spend = $result_statment['experience_points'];
             background-color: lightgray;
             margin-bottom: 10px;
             margin-top: 10px;
-            background-image: url("../7SHOP/icons/wiewiór.gif");
+            background-image: url("icons/wiewiór.gif");
             background-size: cover;
             background-position: center;
         }
@@ -178,7 +206,8 @@ $user_points_to_spend = $result_statment['experience_points'];
             margin: 6px;
         }
 
-        .buy-button {
+        .buy-button,
+        .select-button{
             padding: 5px 10px;
             background-color: #2ecc71;
             border-radius: 12px;
@@ -188,7 +217,7 @@ $user_points_to_spend = $result_statment['experience_points'];
         }
 
         .selected-text {
-            margin: 8px;
+            margin: 4px;
         }
 
         .buy-button:hover {
@@ -197,7 +226,6 @@ $user_points_to_spend = $result_statment['experience_points'];
     </style>
 </head>
 <body>
-<script src="script.js"></script>
 <div class="container">
     <h1>Sklepik</h1>
     <h3>Punkty: <?php echo $user_points_to_spend ?></h3>
@@ -232,12 +260,17 @@ $user_points_to_spend = $result_statment['experience_points'];
                 <div class="item-icon" style="background-image: url('<?php echo $icon; ?>')"></div>
                 <div class="item-name"><?php echo $name; ?></div>
                 <div class="item-price"><?php echo $price; ?></div>
-                <div class="selected-text">Selected</div>
                 <?php
+                if (isset($_COOKIE['avatar'])) {
+                    $avatar = $_COOKIE['avatar'];
+                    if ($avatar == $icon) {
+                        echo "<div class='selected-text'>Selected</div>";
+                    }
+                }
                 if (checkIfAlreadyPurchased($user_id, $id)) {
-                    echo '<button class="buy-button" disabled>✓</button>';
+                    echo '<button class="select-button" onclick="location.href=\'../7SHOP/shop.php?select_item_id=' . $id . '\'">Select</button>';
                 } else {
-                    echo '<button class="buy-button" onclick="location.href=\'../7SHOP/shop.php?item_id=' . $id . '\'" name="item_id" value="' . $id . '">Kup</button>';
+                    echo '<button class="buy-button" onclick="location.href=\'../7SHOP/shop.php?item_id=' . $id . '\'" name="item_id" value="' . $id . '">Buy</button>';
                 }
                 ?>
             </div>
