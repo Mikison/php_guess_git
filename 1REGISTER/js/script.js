@@ -1,7 +1,5 @@
 const forms = document.querySelector(".forms"),
-      pwShowHide = document.querySelectorAll(".eye-icon"),
-      links = document.querySelectorAll(".link");
-
+      pwShowHide = document.querySelectorAll(".eye-icon");
 pwShowHide.forEach(eyeIcon => {
     eyeIcon.addEventListener("click", () => {
         let pwFields = eyeIcon.parentElement.parentElement.querySelectorAll(".password");
@@ -17,15 +15,7 @@ pwShowHide.forEach(eyeIcon => {
         })
         
     })
-})      
-
-// links.forEach(link => {
-//     link.addEventListener("click", e => {
-//        e.preventDefault(); //preventing form submit
-//        forms.classList.toggle("show-signup");
-//     })
-// })
-
+})
 
 
 

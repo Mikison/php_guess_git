@@ -1,5 +1,6 @@
 <?php
 session_start();
+if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
@@ -21,7 +22,7 @@ $champion_guessed = $result['champion_guessed'];
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profil Gracza</title>
+    <title>Game Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
