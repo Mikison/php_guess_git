@@ -1,5 +1,6 @@
 <?php
 session_start();
+if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
 global $conn;
@@ -16,7 +17,7 @@ include "../updatePointsAndLevel.php"
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Zagraj</title>
+    <title>Play - Choose gamemode</title>
     <style>
         body {
             display: flex;
@@ -103,6 +104,7 @@ function checkTable($user_id) {
     experience_points INT NOT NULL,
     all_time_experience_points INT NOT NULL,
     level INT NOT NULL,
+    champion_guessed INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )";
@@ -113,7 +115,7 @@ function checkTable($user_id) {
     $result = $conn->query($sql_check_if_record_exists);
 
     if ($result->rowCount() == 0) {
-        $insert_statment = $conn->prepare("INSERT INTO USERS_LEVELS (user_id, experience_points, all_time_experience_points, level) VALUES (:user_id, 0,0, 1)");
+        $insert_statment = $conn->prepare("INSERT INTO USERS_LEVELS (user_id, experience_points, all_time_experience_points, level, champion_guessed) VALUES (:user_id, 0,0,1, 0)");
         $insert_statment->bindParam('user_id', $user_id);
         $insert_statment->execute();
 
