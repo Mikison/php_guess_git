@@ -2,7 +2,6 @@
 include "../!NAVBAR/navbar.php";
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,19 +9,23 @@ include "../!NAVBAR/navbar.php";
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #0e0e0e;
             color: #fff;
             margin: 0;
             padding: 0;
+            height: 100vh; /* Dodana wysokość strony */
+            display: flex; /* Dodane właściwości flexbox */
+            justify-content: center;
+            align-items: center;
         }
 
         .profile {
-            max-width: 600px;
-            margin: 120px auto;
-            padding: 20px;
-            background-color: #1e1e1e;
+            width: 60%;
+            height: 600px;
+            padding: 40px;
+            background-color: #1a1a1a;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow: auto;
         }
 
         h1 {
@@ -31,28 +34,40 @@ include "../!NAVBAR/navbar.php";
         }
 
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             margin: 0 auto 20px;
             background-color: #555;
         }
 
-        .stat {
-            margin-bottom: 10px;
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
-        .stat strong {
+        .stats-item {
+            flex-basis: 33%;
+            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            margin: 10px;
+            background-color: #0e0e0e;
+        }
+
+        .stats-item strong {
             color: #bbb;
         }
 
-        .stat span {
+        .stats-item span {
             color: #fff;
             font-weight: bold;
         }
 
         .achievements {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .achievement {
@@ -75,23 +90,28 @@ include "../!NAVBAR/navbar.php";
 
     <div class="avatar"></div>
 
-    <div class="stat">
-        <strong>Punkty doświadczenia:</strong> <span id="experience">0</span>
-    </div>
+    <div class="stats">
+        <div class="stats-item">
+            <strong>Punkty doświadczenia:</strong><br>
+            <span id="experience">0</span>
+        </div>
 
-    <div class="stat">
-        <strong>Level:</strong> <span id="level">1</span>
-    </div>
+        <div class="stats-item">
+            <strong>Level:</strong><br>
+            <span id="level">1</span>
+        </div>
 
-    <div class="stat">
-        <strong>Ilość zgadniętych postaci:</strong> <span id="characters">0</span>
+        <div class="stats-item">
+            <strong>Zgadniętych postaci:</strong><br>
+            <span id="characters">0</span>
+        </div>
     </div>
 
     <div class="achievements">
         <h2>Achievementy</h2>
 
         <div class="achievement">
-            <img src="achievement1.jpg" alt="Achievement 1">
+            <img src="down.png" alt="Achievement 1">
             <div>Achievement 1</div>
         </div>
 
