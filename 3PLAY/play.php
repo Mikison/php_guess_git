@@ -28,14 +28,16 @@ include "../updatePointsAndLevel.php"
         }
 
         .container {
+            max-height: 80%;
+            max-width: 80%;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .square {
-            width: 150px;
-            height: 150px;
+            width: 400px;
+            height: 400px;
             margin: 70px;
             padding: 100px;
             border-radius: 30px;
@@ -54,7 +56,7 @@ include "../updatePointsAndLevel.php"
         }
 
         .square p {
-            font-size: 24px;
+            font-size: 100px;
             color: white;
         }
 
