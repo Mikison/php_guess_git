@@ -19,13 +19,30 @@ $statment_to_get_stats = $conn->prepare("SELECT all_time_experience_points, leve
 $statment_to_get_stats->bindParam(':user_id', $user_id);
 $statment_to_get_stats->execute();
 
+$checkSelectedAvatarStatement = $conn->prepare("
+            SELECT SHOP_ITEMS.icon 
+            FROM USERS_PURCHASES 
+            JOIN SHOP_ITEMS ON USERS_PURCHASES.item_id = SHOP_ITEMS.id 
+            WHERE USERS_PURCHASES.user_id = :user_id 
+            AND USERS_PURCHASES.category = 'Avatar' 
+            AND USERS_PURCHASES.selected = 1
+        ");
+$checkSelectedAvatarStatement->bindParam(':user_id', $user_id);
+$checkSelectedAvatarStatement->execute();
 $result = $statment_to_get_stats->fetch(PDO::FETCH_ASSOC);
 
+
+$resultAvatar = $checkSelectedAvatarStatement->fetch(PDO::FETCH_ASSOC);
+
+if ($resultAvatar) {
+    $avatar_name = $resultAvatar['icon'];
+} else {
+    $avatar_name = 'icons/default.png';
+}
 $all_time_experience_ponts = $result['all_time_experience_points'];
 $level = $result['level'];
 $champion_guessed = $result['champion_guessed'];
 
-$avatar_name = $_COOKIE['avatar'] ?? 'icons/default.png';
 ?>
 
 <!DOCTYPE html>

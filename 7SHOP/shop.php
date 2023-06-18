@@ -8,7 +8,7 @@ include "../connection.php";
 checkTable();
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
     $item_id = $_GET["item_id"];
-    // Pobranie odpowiedniego itemka z SQL i zapisanie jego ceny do zmiennej
+
     $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
     $getItemPrice_sql->bindParam('item_id', $item_id);
     $getItemPrice_sql->execute();
@@ -18,22 +18,30 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
     $price_in_points = $rows['price'];
     $category = $rows['category'];
     $icon = $rows['icon'];
-    // Zabranie za kupioną rzecz punktów użytkownikowi
+
     $statement_points = $conn->prepare("UPDATE USERS_LEVELS SET experience_points = experience_points - :points  WHERE user_id = :user_id");
     $statement_points->bindParam(':points', $price_in_points);
     $statement_points->bindParam(':user_id', $user_id);
     $statement_points->execute();
-    // Wpisanie w bazę danych zakupu użytkownika
-    $statment_insert_purchases = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id) VALUES (:user_id, :item_id)");
+    console_log($category);
+
+    $statment_insert_purchases = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id,category, selected) VALUES (:user_id, :item_id,:category, 1)");
     $statment_insert_purchases->bindParam(':user_id', $user_id);
     $statment_insert_purchases->bindParam(':item_id', $item_id);
+    $statment_insert_purchases->bindParam(':category', $category);
     $statment_insert_purchases->execute();
 
-    if ($category == 'Avatar') {
-        setcookie('avatar', $icon, time() + 60 * 60 * 24 * 7, '/');
-    }
+    $update_selected_others = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 0 WHERE category = :category");
+    $update_selected_others->bindParam(':category', $category);
+    $update_selected_others->execute();
+
+    $update_selected_bought = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 1 WHERE category = :category AND item_id = :item_id");
+    $update_selected_bought->bindParam(':item_id', $item_id);
+    $update_selected_bought->bindParam(':category', $category);
+    $update_selected_bought->execute();
 
 
+    console_log("Przed headerem");
     header("Location: ../7SHOP/shop.php");
     exit();
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["select_item_id"])) {
@@ -45,13 +53,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
 
     $category = $rows['category'];
     $icon = $rows['icon'];
-    if ($category == 'Avatar') {
-        setcookie('avatar', $icon, time() + 60 * 60 * 24 * 7, '/');
-    } elseif ($category == 'Theme') {
-        setcookie('theme', $icon, time() + 60 * 60 * 24 * 7, '/');
-    } elseif ($category == 'Champions') {
-        setcookie('champs', 'yes', time() + 60 * 60 * 24 * 7, '/');
-    }
+    $update_selected_others = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 0 WHERE category = :category");
+    $update_selected_others->bindParam(':category', $category);
+    $update_selected_others->execute();
+
+    $update_selected_bought = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 1 WHERE category = :category AND item_id = :item_id");
+    $update_selected_bought->bindParam(':item_id', $selectItemId);
+    $update_selected_bought->bindParam(':category', $category);
+    $update_selected_bought->execute();
     header("Location: ../7SHOP/shop.php");
     exit();
 }
@@ -69,8 +78,7 @@ function checkTable() {
         name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
         price INT NOT NULL,
         icon VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-        category VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-        selected INT NOT NULL)";
+        category VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL)";
         $conn->exec($new_table_statement);
 
 
@@ -92,6 +100,8 @@ function checkTable() {
         purchase_ID INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
         item_id INT NOT NULL,
+        category VARCHAR(255),
+        selected INT NOT NULL,
         purchased_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
         $conn->exec($new_table_statement);
@@ -261,13 +271,21 @@ $user_points_to_spend = $result_statment['experience_points'];
                 <div class="item-name"><?php echo $name; ?></div>
                 <div class="item-price"><?php echo $price; ?></div>
                 <?php
-                if (isset($_COOKIE['avatar']) || isset($_COOKIE['theme'])) {
-                    $avatar = $_COOKIE['avatar'];
-                    $theme = $_COOKIE['theme'];
-                    if ($avatar == $icon || $theme == $icon) {
-                        echo "<div class='selected-text'>Selected</div>";
-                    }
+                $checkSelectedStatement = $conn->prepare("SELECT selected FROM USERS_PURCHASES WHERE user_id = :user_id AND item_id = :item_id");
+                $checkSelectedStatement->bindParam(':user_id', $user_id);
+                $checkSelectedStatement->bindParam(':item_id', $id);
+                $checkSelectedStatement->execute();
+
+                $resultSelected = $checkSelectedStatement->fetch(PDO::FETCH_ASSOC);
+                if ($resultSelected) {
+                    $isSelected = $resultSelected['selected'];
+                } else {
+                    $isSelected = 0;
                 }
+                if ($isSelected == 1 && $category != 'Champions') {
+                    echo "<div class='selected-text'>Selected</div>";
+                }
+
                 if (checkIfAlreadyPurchased($user_id, $id)) {
                     if ($category == 'Champions') {
                         echo '<button class="select-button">✓</button>';
