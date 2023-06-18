@@ -190,11 +190,25 @@ $avatar_name = $_COOKIE['avatar'] ?? 'icons/default.png';
             cursor: pointer;
         }
 
+        .profile .logout-button {
+            position: absolute;
+            right: 50px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #e06412;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <script src="script.js"></script>
 <body>
 <div class="profile">
+    <button class="logout-button" onclick="logout()">Wyloguj</button>
     <button class="edit-button">Edytuj konto</button>
     <button class="delete-button" onclick="showConfirmationDialog()">Usuń konto</button>
 

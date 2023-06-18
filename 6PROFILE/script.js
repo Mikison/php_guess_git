@@ -17,5 +17,9 @@ function hideConfirmationDialog() {
 }
 
 function deleteAccount() {
-    window.location.href = "logout.php";
+    window.location.href = "delete_account.php";
+}
+
+function logout() {
+    return window.location.href = "logout.php";
 }
