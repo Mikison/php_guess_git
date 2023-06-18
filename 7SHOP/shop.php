@@ -69,7 +69,8 @@ function checkTable() {
         name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
         price INT NOT NULL,
         icon VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-        category VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL)";
+        category VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+        selected INT NOT NULL)";
         $conn->exec($new_table_statement);
 
 
@@ -108,7 +109,6 @@ function checkIfAlreadyPurchased($user_id, $item_id) {
     $count = $result['count'];
 
     if ($count > 0) {
-        console_log("Istnieje");
         return true;
     }
     return false;

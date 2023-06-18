@@ -19,7 +19,6 @@ $sql3 = "DELETE FROM users_purchases WHERE user_id = :user_id";
 $stmt3 = $conn->prepare($sql3);
 $stmt3->bindParam(':user_id', $user_id);
 $stmt3->execute();
-session_destroy();
-header("Location: ../2LOGIN/login.php");
+header("Location: logout.php");
 exit;
 ?>
