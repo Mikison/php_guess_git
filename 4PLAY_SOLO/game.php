@@ -232,7 +232,6 @@ createBOXES(strlen($championName));
 
 
 
-
 ?>
 <div class="container">
     <div class="square-for-description">

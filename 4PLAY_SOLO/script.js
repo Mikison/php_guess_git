@@ -16,6 +16,7 @@ document.addEventListener('keydown', function (event){
     }
 })
 
+
 function updatePoints(number) {
     let number_int = parseInt(number);
     points += number_int;

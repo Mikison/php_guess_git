@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
         setcookie('avatar', $icon, time() + 60 * 60 * 24 * 7, '/');
     } elseif ($category == 'Theme') {
         setcookie('theme', $icon, time() + 60 * 60 * 24 * 7, '/');
-    } else {
+    } elseif ($category == 'Champions') {
         setcookie('champs', 'yes', time() + 60 * 60 * 24 * 7, '/');
     }
     header("Location: ../7SHOP/shop.php");
@@ -261,14 +261,19 @@ $user_points_to_spend = $result_statment['experience_points'];
                 <div class="item-name"><?php echo $name; ?></div>
                 <div class="item-price"><?php echo $price; ?></div>
                 <?php
-                if (isset($_COOKIE['avatar'])) {
+                if (isset($_COOKIE['avatar']) || isset($_COOKIE['theme'])) {
                     $avatar = $_COOKIE['avatar'];
-                    if ($avatar == $icon) {
+                    $theme = $_COOKIE['theme'];
+                    if ($avatar == $icon || $theme == $icon) {
                         echo "<div class='selected-text'>Selected</div>";
                     }
                 }
                 if (checkIfAlreadyPurchased($user_id, $id)) {
-                    echo '<button class="select-button" onclick="location.href=\'../7SHOP/shop.php?select_item_id=' . $id . '\'">Select</button>';
+                    if ($category == 'Champions') {
+                        echo '<button class="select-button">✓</button>';
+                    } else {
+                        echo '<button class="select-button" onclick="location.href=\'../7SHOP/shop.php?select_item_id=' . $id . '\'">Select</button>';
+                    }
                 } else {
                     echo '<button class="buy-button" onclick="location.href=\'../7SHOP/shop.php?item_id=' . $id . '\'" name="item_id" value="' . $id . '">Buy</button>';
                 }
