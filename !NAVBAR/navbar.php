@@ -14,7 +14,7 @@ include "../getTheme.php";
     <a href="../6PROFILE/profile.php">Profil</a>
     <a href="../7SHOP/shop.php">Sklep</a>
     <a href="../8RANKINGS/ranking.php">Rankingi</a>
-    <a href="#">Ustawienia</a>
+    <a href="../9SETTINGS/settings.php">Ustawienia</a>
     <div class="animation start-home"></div>
 </nav>
 

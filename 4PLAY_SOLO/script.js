@@ -4,7 +4,7 @@ const submitButton = document.getElementById('champion-submit');
 const messageDiv = document.getElementById('message');
 const giveHintButton = document.getElementById('champion-givehint');
 const resetButton = document.getElementById('reset');
-
+const audioDing = new Audio('../3PLAY/ding.wav');
 
 
 let points = parseInt(points_html.getAttribute('data-initial-points')) || 0;
@@ -16,8 +16,22 @@ document.addEventListener('keydown', function (event){
     }
 })
 
+function getCookieValue(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieArray = decodedCookie.split(";");
 
-function updatePoints(number) {
+    for (var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i].trim();
+        if (cookie.indexOf(name) === 0) {
+            return cookie.substring(name.length, cookie.length);
+        }
+    }
+
+    return "";
+}
+
+    function updatePoints(number) {
     let number_int = parseInt(number);
     points += number_int;
     points_html.innerText = points;
@@ -89,6 +103,8 @@ function checkGuess(rightGuessString) {
     }
     if (guessString.toUpperCase() === rightGuessString.toUpperCase()) {
         updateDiv('Gratulacje! Udało ci się zgadnąć! Otrzymujesz ' + points + ' punktów', 'green');
+        audioDing.volume = parseFloat(getCookieValue('volume'));
+        audioDing.play();
         giveHintButton.setAttribute('disabled', 'true');
         createCookie('points', points, 5);
         resetButton.style.display = 'inline-block'

@@ -3,6 +3,7 @@ const guesess_html = document.getElementById('guessess-value');
 const submitButton = document.getElementById('champion-submit');
 const messageDiv = document.getElementById('message');
 const resetButton = document.getElementById('reset');
+const audioDing = new Audio('../3PLAY/ding.wav');
 
 
 
@@ -88,6 +89,8 @@ function checkGuess(rightGuessString) {
     }
     if (guessString.toUpperCase() === rightGuessString.toUpperCase()) {
         updateDiv('Gratulacje! Udało ci się zgadnąć! Otrzymujesz ' + points + ' punktów', 'green');
+        audioDing.volume = parseFloat(getCookieValue('volume'));
+        audioDing.play();
         createCookie('points', points, 5);
         resetButton.style.display = 'inline-block'
     } else {

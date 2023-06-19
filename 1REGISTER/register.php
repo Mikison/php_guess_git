@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="field button-field">
-                    <input type="submit" value="Sign up" name="register" "/>
+                    <input type="submit" value="Sign up" name="register"/>
                 </div>
             </form>
 
