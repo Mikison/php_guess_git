@@ -1,14 +1,13 @@
 <?php
+global $theme;
 session_start();
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
+include "../updatePointsAndLevel.php";
 global $conn;
 $user_id = $_SESSION['user_id'];
-checkTable($user_id);
-include "../updatePointsAndLevel.php"
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -18,7 +17,7 @@ include "../updatePointsAndLevel.php"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Play - Choose gamemode</title>
-    <link href="css/czarny.css" rel="stylesheet">
+    <link href="css/<?php echo $theme?>.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -41,46 +40,6 @@ include "../updatePointsAndLevel.php"
     </script>
 </div>
 <?php
-
-function console_log($data)
-{
-    $output = $data;
-    if (is_array($output))
-        $output = implode(',', $output);
-
-    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-}
-
-
-function checkTable($user_id) {
-    global $conn;
-    $check_table_statement = "SHOW TABLES LIKE 'USERS_LEVELS'";
-    $table_exists = $conn->query($check_table_statement)->rowCount() !== 0;
-    if (!$table_exists) {
-        $new_table_statement = "CREATE TABLE USERS_LEVELS (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    experience_points INT NOT NULL,
-    all_time_experience_points INT NOT NULL,
-    level INT NOT NULL,
-    champion_guessed INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )";
-        $conn->exec($new_table_statement);
-    }
-
-    $sql_check_if_record_exists = "SELECT user_id FROM USERS_LEVELS WHERE user_id = '$user_id'";
-    $result = $conn->query($sql_check_if_record_exists);
-
-    if ($result->rowCount() == 0) {
-        $insert_statment = $conn->prepare("INSERT INTO USERS_LEVELS (user_id, experience_points, all_time_experience_points, level, champion_guessed) VALUES (:user_id, 0,0,1, 0)");
-        $insert_statment->bindParam('user_id', $user_id);
-        $insert_statment->execute();
-
-    }
-}
-
 if (isset($_POST['divClicked'])) {
     $clickedDiv = $_POST['divClicked'];
 

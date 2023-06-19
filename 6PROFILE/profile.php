@@ -1,18 +1,11 @@
 <?php
+global $theme;
 session_start();
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
 global $conn;
-function console_log($data)
-{
-    $output = $data;
-    if (is_array($output))
-        $output = implode(',', $output);
-
-    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-}
 
 
 $statment_to_get_stats = $conn->prepare("SELECT all_time_experience_points, level, champion_guessed FROM USERS_LEVELS WHERE user_id = :user_id;");
@@ -48,7 +41,7 @@ $champion_guessed = $result['champion_guessed'];
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/czarny.css">
+    <link rel="stylesheet" href="css/<?php echo $theme?>.css">
     <title>Game Profile</title>
     <style>
         .avatar {

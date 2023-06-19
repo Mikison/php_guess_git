@@ -1,13 +1,10 @@
 <?php
-global $conn, $user_points_to_spend;
+global $conn, $user_points_to_spend, $theme;
 session_start();
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
-include "../getTheme.php";
-console_log(getTheme());
-checkTables();
 
 $sql = "SELECT COUNT(*) as count FROM USERS_PURCHASES WHERE item_id IN (1, 4)";
 $result = $conn->query($sql);
@@ -21,50 +18,6 @@ if ($count !== 2) {
     $statment_insert_default_things->execute();
 }
 
-
-function checkTables() {
-    global $conn;
-    $check_table_statement = "SHOW TABLES LIKE 'SHOP_ITEMS'";
-    $table_exists = $conn->query($check_table_statement)->rowCount() !== 0;
-    if (!$table_exists) {
-        $new_table_statement = "
-        CREATE TABLE SHOP_ITEMS (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-        price INT NOT NULL,
-        icon VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-        category VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL)";
-        $conn->exec($new_table_statement);
-
-
-
-        $stmt = $conn->prepare("INSERT INTO SHOP_ITEMS (name, price, icon, category) VALUES
-        ('Default', 0, 'icons/default.png', 'Avatar'),                                            
-        ('Bober', 500, 'icons/bober.jpeg', 'Avatar'),
-        ('Wiewiór', 2000, 'icons/wiewiór.gif', 'Avatar'),
-        ('Czarny', 0, 'icons/BLACK.png', 'Theme'),
-        ('Biały', 1000, 'icons/white.png', 'Theme'),
-        ('Kolor', 5000, 'icons/rainbow.png', 'Theme'),
-        ('Zestaw Postaci', 3000, 'characters/character1.png', 'Champions')
-");
-        $stmt->execute();
-    }
-
-    $check_table_statement_purchase = "SHOW TABLES LIKE 'USERS_PURCHASES'";
-    $table_exists_purchase = $conn->query($check_table_statement_purchase)->rowCount() !== 0;
-    if (!$table_exists_purchase) {
-        $new_table_statement = "CREATE TABLE USERS_PURCHASES (
-        purchase_ID INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        item_id INT NOT NULL,
-        category VARCHAR(255),
-        selected INT NOT NULL,
-        purchased_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)";
-        $conn->exec($new_table_statement);
-    }
-
-}
 function checkIfAlreadyPurchased($user_id, $item_id) {
     global $conn;
     $check_statement = $conn->prepare("SELECT COUNT(*) as count FROM USERS_PURCHASES WHERE user_id = :user_id AND item_id = :item_id");
@@ -82,16 +35,6 @@ function checkIfAlreadyPurchased($user_id, $item_id) {
 }
 
 
-function console_log($data)
-{
-    $output = $data;
-    if (is_array($output))
-        $output = implode(',', $output);
-
-    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-}
-
-
 $statement = $conn->prepare("SELECT experience_points FROM USERS_LEVELS WHERE user_id = :user_id");
 $statement->bindParam(':user_id', $user_id);
 $statement->execute();
@@ -105,7 +48,7 @@ $user_points_to_spend = $result_statment['experience_points'];
 <html>
 <head>
     <title>Shop</title>
-    <link rel="stylesheet" href="css/czarny.css">
+    <link rel="stylesheet" href="css/<?php echo $theme?>.css">
 </head>
 <body>
 <div class="container">

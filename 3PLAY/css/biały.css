@@ -27,7 +27,7 @@ body {
     -webkit-user-select: none;
     cursor: pointer;
     align-items: center;
-    background-color: #1a1a1a;
+    background-color: #ffffff;
 }
 
 .square:hover {
@@ -36,5 +36,5 @@ body {
 
 .square p {
     font-size: 100px;
-    color: white;
+    color: black;
 }

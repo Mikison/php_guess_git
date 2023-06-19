@@ -1,11 +1,12 @@
 <?php
+global $theme;
+include "../getTheme.php";
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../!NAVBAR/css/czarny.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="../!NAVBAR/css/<?php echo $theme?>.css">
 </head>
 <body>
 <nav>

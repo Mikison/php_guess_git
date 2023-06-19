@@ -1,8 +1,12 @@
-<!DOCTYPE html>
+<?php
+include "../getTheme.php";
+global $theme
+?>
+; <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="css-homeless/czarny.css">
+    <link rel="stylesheet" href="../!NAVBAR/css-homeless/<?php echo $theme?>.css">
 </head>
 <body>
 <nav>

@@ -2,7 +2,7 @@
 
 body {
 	font-family: 'Open Sans', sans-serif;
-	background: #c4c1c1;
+	background: #8a8888;
 	margin-bottom: 30px;
 	padding: 0;
 
@@ -15,7 +15,7 @@ nav {
 	transform: translateX(-50%);
 	width: 590px;
 	height: 50px;
-	background: #0e0e0e;
+	background: #b7b1b1;
 	border-radius: 8px;
 	font-size: 0;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);

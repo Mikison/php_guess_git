@@ -1,4 +1,5 @@
 <?php
+global $theme;
 session_start();
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 include "../connection.php";
@@ -11,7 +12,7 @@ include "../updatePointsAndLevel.php";
 <!doctype html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="css/czarny.css">
+    <link rel="stylesheet" href="../5PLAY_GRAPHIC/css/<?php echo $theme?>.css">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">

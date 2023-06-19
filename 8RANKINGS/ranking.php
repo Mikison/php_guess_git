@@ -1,4 +1,6 @@
 <?php
+session_start();
+global $theme;
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
@@ -9,7 +11,7 @@ global $conn;
 <html>
 <head>
     <title>Ranking</title>
-    <link  rel="stylesheet" href="css/czarny.css">
+    <link  rel="stylesheet" href="css/<?php echo $theme?>.css">
 </head>
 <body>
 <div class="container">

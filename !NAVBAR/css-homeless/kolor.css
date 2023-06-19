@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Open Sans', sans-serif;
-    background: #0e0e0e;
+    background: #e39b9b;
     margin: 0;
     padding: 0;
     position: relative;
@@ -12,9 +12,9 @@ nav {
     position: absolute;
     top: 10px;
     left: 47.5%;
-    width: 590px;
+    width: 210px;
     height: 50px;
-    background: #0e0e0e;
+    background: #1b24f6;
     border-radius: 8px;
     font-size: 0;
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
