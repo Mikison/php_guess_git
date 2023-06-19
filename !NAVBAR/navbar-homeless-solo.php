@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../!NAVBAR/css-homeless/style.css">
+    <link rel="stylesheet" href="css-homeless/czarny.css">
 </head>
 <body>
 <nav>

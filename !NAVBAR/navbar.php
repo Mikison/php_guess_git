@@ -1,8 +1,10 @@
+<?php
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../!NAVBAR/css/style.css">
+    <link rel="stylesheet" href="../!NAVBAR/css/czarny.css">
     <script src="script.js"></script>
 </head>
 <body>

@@ -1,6 +1,7 @@
 <?php
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
+if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 global $conn;
 ?>
 

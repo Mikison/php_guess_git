@@ -1,17 +1,20 @@
 <?php
-global $conn;
+global $conn, $user_points_to_spend;
 session_start();
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
-checkTable();
+include "../getTheme.php";
+console_log(getTheme());
+checkTables();
 
-$sql = "SELECT item_id, COUNT(*) as count FROM USERS_PURCHASES WHERE item_id IN (1, 4) GROUP BY item_id HAVING count = 2";
+$sql = "SELECT COUNT(*) as count FROM USERS_PURCHASES WHERE item_id IN (1, 4)";
 $result = $conn->query($sql);
+$count = $result->fetchColumn();
 
-if (!$result->rowCount() == 2) {
-    $statment_insert_default_things = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id,category, selected) VALUES 
+if ($count !== 2) {
+    $statment_insert_default_things = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id, category, selected) VALUES 
     (:user_id, 1, 'Avatar', 1),
     (:user_id, 4, 'Theme', 1)");
     $statment_insert_default_things->bindParam(':user_id', $user_id);
@@ -19,72 +22,7 @@ if (!$result->rowCount() == 2) {
 }
 
 
-
-
-
-
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
-    $item_id = $_GET["item_id"];
-
-    $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
-    $getItemPrice_sql->bindParam(':item_id', $item_id);
-    $getItemPrice_sql->execute();
-    $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
-
-    //Zmienne
-    $price_in_points = $rows['price'];
-    $category = $rows['category'];
-    $icon = $rows['icon'];
-
-    $statement_points = $conn->prepare("UPDATE USERS_LEVELS SET experience_points = experience_points - :points  WHERE user_id = :user_id");
-    $statement_points->bindParam(':points', $price_in_points);
-    $statement_points->bindParam(':user_id', $user_id);
-    $statement_points->execute();
-    console_log($category);
-
-    $statment_insert_purchases = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id,category, selected) VALUES (:user_id, :item_id,:category, 1)");
-    $statment_insert_purchases->bindParam(':user_id', $user_id);
-    $statment_insert_purchases->bindParam(':item_id', $item_id);
-    $statment_insert_purchases->bindParam(':category', $category);
-    $statment_insert_purchases->execute();
-
-    $update_selected_others = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 0 WHERE category = :category");
-    $update_selected_others->bindParam(':category', $category);
-    $update_selected_others->execute();
-
-    $update_selected_bought = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 1 WHERE category = :category AND item_id = :item_id");
-    $update_selected_bought->bindParam(':item_id', $item_id);
-    $update_selected_bought->bindParam(':category', $category);
-    $update_selected_bought->execute();
-
-
-    console_log("Przed headerem");
-    header("Location: ../7SHOP/shop.php");
-    exit();
-} elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["select_item_id"])) {
-    $selectItemId = $_GET["select_item_id"];
-    $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
-    $getItemPrice_sql->bindParam('item_id', $selectItemId);
-    $getItemPrice_sql->execute();
-    $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
-
-    $category = $rows['category'];
-    $icon = $rows['icon'];
-    $update_selected_others = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 0 WHERE category = :category");
-    $update_selected_others->bindParam(':category', $category);
-    $update_selected_others->execute();
-
-    $update_selected_bought = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 1 WHERE category = :category AND item_id = :item_id");
-    $update_selected_bought->bindParam(':item_id', $selectItemId);
-    $update_selected_bought->bindParam(':category', $category);
-    $update_selected_bought->execute();
-    header("Location: ../7SHOP/shop.php");
-    exit();
-}
-
-
-
-function checkTable() {
+function checkTables() {
     global $conn;
     $check_table_statement = "SHOW TABLES LIKE 'SHOP_ITEMS'";
     $table_exists = $conn->query($check_table_statement)->rowCount() !== 0;
@@ -235,6 +173,69 @@ $user_points_to_spend = $result_statment['experience_points'];
         }
         echo "</div>";
         echo "</div>";
+    }
+    ?>
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
+        $item_id = $_GET["item_id"];
+
+        $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
+        $getItemPrice_sql->bindParam(':item_id', $item_id);
+        $getItemPrice_sql->execute();
+        $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
+
+        //Zmienne
+        $price_in_points = $rows['price'];
+        $category = $rows['category'];
+        $icon = $rows['icon'];
+
+        if ($user_points_to_spend < $price_in_points) {
+            header("Location: ../7SHOP/shop.php");
+            exit();
+        }
+
+        $statement_points = $conn->prepare("UPDATE USERS_LEVELS SET experience_points = experience_points - :points  WHERE user_id = :user_id");
+        $statement_points->bindParam(':points', $price_in_points);
+        $statement_points->bindParam(':user_id', $user_id);
+        $statement_points->execute();
+
+        $statment_insert_purchases = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id,category, selected) VALUES (:user_id, :item_id,:category, 1)");
+        $statment_insert_purchases->bindParam(':user_id', $user_id);
+        $statment_insert_purchases->bindParam(':item_id', $item_id);
+        $statment_insert_purchases->bindParam(':category', $category);
+        $statment_insert_purchases->execute();
+
+        $update_selected_others = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 0 WHERE category = :category");
+        $update_selected_others->bindParam(':category', $category);
+        $update_selected_others->execute();
+
+        $update_selected_bought = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 1 WHERE category = :category AND item_id = :item_id");
+        $update_selected_bought->bindParam(':item_id', $item_id);
+        $update_selected_bought->bindParam(':category', $category);
+        $update_selected_bought->execute();
+
+
+        header("Location: ../7SHOP/shop.php");
+        exit();
+    } elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["select_item_id"])) {
+        $selectItemId = $_GET["select_item_id"];
+        $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
+        $getItemPrice_sql->bindParam('item_id', $selectItemId);
+        $getItemPrice_sql->execute();
+        $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
+
+        $category = $rows['category'];
+        $icon = $rows['icon'];
+        $update_selected_others = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 0 WHERE category = :category");
+        $update_selected_others->bindParam(':category', $category);
+        $update_selected_others->execute();
+
+        $update_selected_bought = $conn->prepare("UPDATE USERS_PURCHASES SET selected = 1 WHERE category = :category AND item_id = :item_id");
+        $update_selected_bought->bindParam(':item_id', $selectItemId);
+        $update_selected_bought->bindParam(':category', $category);
+        $update_selected_bought->execute();
+        header("Location: ../7SHOP/shop.php");
+        exit();
     }
     ?>
 </div>
