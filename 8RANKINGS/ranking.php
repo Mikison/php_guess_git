@@ -8,46 +8,7 @@ global $conn;
 <html>
 <head>
     <title>Ranking</title>
-    <style>
-        body {
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 100px;
-        }
-
-        .container {
-            width: 60%;
-            margin: 0 auto;
-            user-select: contain;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            text-align: center;
-            padding: 10px;
-            user-select: none;
-        }
-
-        tr:nth-child(even) {
-            background-color: #333;
-        }
-
-        th {
-            background-color: #555;
-            color: #fff;
-        }
-    </style>
+    <link  rel="stylesheet" href="css/czarny.css">
 </head>
 <body>
 <div class="container">

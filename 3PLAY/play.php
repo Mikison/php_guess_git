@@ -18,50 +18,7 @@ include "../updatePointsAndLevel.php"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Play - Choose gamemode</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            max-height: 80%;
-            max-width: 80%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .square {
-            width: 400px;
-            height: 400px;
-            margin: 70px;
-            padding: 100px;
-            border-radius: 30px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            display: flex;
-            justify-content: center;
-            -webkit-user-select: none;
-            cursor: pointer;
-            align-items: center;
-            background-color: #1a1a1a;
-        }
-
-        .square:hover {
-            transform: scale(1.1);
-        }
-
-        .square p {
-            font-size: 100px;
-            color: white;
-        }
-
-    </style>
-
+    <link href="css/czarny.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">

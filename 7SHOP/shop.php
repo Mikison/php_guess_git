@@ -104,9 +104,9 @@ function checkTable() {
         ('Default', 0, 'icons/default.png', 'Avatar'),                                            
         ('Bober', 500, 'icons/bober.jpeg', 'Avatar'),
         ('Wiewiór', 2000, 'icons/wiewiór.gif', 'Avatar'),
-        ('Motyw Czarny', 0, 'icons/BLACK.png', 'Theme'),
-        ('Motyw Biały', 1000, 'icons/white.png', 'Theme'),
-        ('Motyw Kolor', 5000, 'icons/rainbow.png', 'Theme'),
+        ('Czarny', 0, 'icons/BLACK.png', 'Theme'),
+        ('Biały', 1000, 'icons/white.png', 'Theme'),
+        ('Kolor', 5000, 'icons/rainbow.png', 'Theme'),
         ('Zestaw Postaci', 3000, 'characters/character1.png', 'Champions')
 ");
         $stmt->execute();
@@ -167,92 +167,7 @@ $user_points_to_spend = $result_statment['experience_points'];
 <html>
 <head>
     <title>Shop</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: #eee;
-            padding: 20px;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            justify-content: center;
-        }
-
-        .category {
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .category-title {
-            margin: 10px 0 10px 0;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .items-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            user-select: none;
-        }
-
-        .item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 300px;
-            height: 275px;
-            padding: 10px;
-            background-color: #1a1a1a;
-            border-radius: 20px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        .item-icon {
-            width: 150px;
-            height: 150px;
-            background-color: lightgray;
-            margin-bottom: 10px;
-            margin-top: 10px;
-            background-image: url("icons/wiewiór.gif");
-            background-size: cover;
-            background-position: center;
-        }
-
-        .item-name {
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .item-price {
-            margin: 6px;
-        }
-
-        .buy-button,
-        .select-button{
-            padding: 5px 10px;
-            background-color: #2ecc71;
-            border-radius: 12px;
-            color: #fff;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .selected-text {
-            margin: 4px;
-        }
-
-        .buy-button:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <link rel="stylesheet" href="css/czarny.css">
 </head>
 <body>
 <div class="container">
