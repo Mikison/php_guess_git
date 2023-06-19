@@ -6,11 +6,28 @@ $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
 checkTable();
+
+$sql = "SELECT item_id, COUNT(*) as count FROM USERS_PURCHASES WHERE item_id IN (1, 4) GROUP BY item_id HAVING count = 2";
+$result = $conn->query($sql);
+
+if (!$result->rowCount() == 2) {
+    $statment_insert_default_things = $conn->prepare("INSERT INTO USERS_PURCHASES (user_id, item_id,category, selected) VALUES 
+    (:user_id, 1, 'Avatar', 1),
+    (:user_id, 4, 'Theme', 1)");
+    $statment_insert_default_things->bindParam(':user_id', $user_id);
+    $statment_insert_default_things->execute();
+}
+
+
+
+
+
+
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["item_id"])) {
     $item_id = $_GET["item_id"];
 
     $getItemPrice_sql = $conn->prepare("SELECT id, name, price, icon, category FROM SHOP_ITEMS WHERE id = :item_id");
-    $getItemPrice_sql->bindParam('item_id', $item_id);
+    $getItemPrice_sql->bindParam(':item_id', $item_id);
     $getItemPrice_sql->execute();
     $rows = $getItemPrice_sql->fetch(PDO::FETCH_ASSOC);
 
@@ -84,8 +101,10 @@ function checkTable() {
 
 
         $stmt = $conn->prepare("INSERT INTO SHOP_ITEMS (name, price, icon, category) VALUES
+        ('Default', 0, 'icons/default.png', 'Avatar'),                                            
         ('Bober', 500, 'icons/bober.jpeg', 'Avatar'),
         ('Wiewiór', 2000, 'icons/wiewiór.gif', 'Avatar'),
+        ('Motyw Czarny', 0, 'icons/BLACK.png', 'Theme'),
         ('Motyw Biały', 1000, 'icons/white.png', 'Theme'),
         ('Motyw Kolor', 5000, 'icons/rainbow.png', 'Theme'),
         ('Zestaw Postaci', 3000, 'characters/character1.png', 'Champions')

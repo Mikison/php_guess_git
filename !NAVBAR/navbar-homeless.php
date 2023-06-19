@@ -7,7 +7,7 @@
 <body>
 <nav>
     <a href="../3PLAY/play.php"">Home</a>
-    <a href="../4PLAY_SOLO/game.php" id="reset" style="display: none">Reset</a>
+    <a href="../4PLAY_SOLO/game_solo.php" id="reset" style="display: none">Reset</a>
     <div class="animation start-home"></div>
 </nav>
 

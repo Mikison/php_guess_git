@@ -128,7 +128,7 @@ if (isset($_POST['divClicked'])) {
     $clickedDiv = $_POST['divClicked'];
 
     if ($clickedDiv === 'solo-square') {
-        header("Location: ../4PLAY_SOLO/game.php");
+        header("Location: ../4PLAY_SOLO/game_graphic.php");
         exit();
     } elseif ($clickedDiv === 'graphic-square') {
 //        header("Location: podstrona2.php"); //TODO GRAPHIC SOLUTION
