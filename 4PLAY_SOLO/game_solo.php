@@ -3,7 +3,7 @@ session_start();
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 include "../connection.php";
 global $conn;
-include "../!NAVBAR/navbar-homeless.php";
+include "../!NAVBAR/navbar-homeless-solo.php";
 include "../updatePointsAndLevel.php";
 ?>
 

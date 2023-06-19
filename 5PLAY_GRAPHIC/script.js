@@ -2,7 +2,6 @@ const points_html = document.getElementById('points-value');
 const guesess_html = document.getElementById('guessess-value');
 const submitButton = document.getElementById('champion-submit');
 const messageDiv = document.getElementById('message');
-const giveHintButton = document.getElementById('champion-givehint');
 const resetButton = document.getElementById('reset');
 
 
@@ -89,17 +88,15 @@ function checkGuess(rightGuessString) {
     }
     if (guessString.toUpperCase() === rightGuessString.toUpperCase()) {
         updateDiv('Gratulacje! Udało ci się zgadnąć! Otrzymujesz ' + points + ' punktów', 'green');
-        giveHintButton.setAttribute('disabled', 'true');
         createCookie('points', points, 5);
         resetButton.style.display = 'inline-block'
     } else {
 
-        updatePoints('-15');
+        updatePoints('-30');
         updateGuessess('-1');
 
         if (guessesRemaining === 0) {
             updateDiv('Niestety, nie udało ci się zgadnąć. Prawidłowa odpowiedź: ' + rightGuessString, '#ff0000');
-            giveHintButton.setAttribute('disabled', 'true');
             submitButton.setAttribute('disabled', 'true');
             resetButton.style.display = 'inline-block'
 
@@ -108,20 +105,6 @@ function checkGuess(rightGuessString) {
     }
 }
 
-function showHint() {
-    const divHint1 = document.getElementById('square-hint1');
-    const divHint2 = document.getElementById('square-hint2');
-    if (divHint1.style.display === 'none') {
-        divHint1.style.display = '';
-        updatePoints('-10');
-        return;
-    }
-    if (divHint2.style.display === 'none') {
-        divHint2.style.display = '';
-        updatePoints('-10');
-        return;
-    }
-}
 
 function toggleBoxes() {
     var boxes = document.getElementById('boxes');
