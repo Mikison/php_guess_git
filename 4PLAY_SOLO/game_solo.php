@@ -6,6 +6,7 @@ include "../connection.php";
 global $conn;
 include "../!NAVBAR/navbar-homeless-solo.php";
 include "../updatePointsAndLevel.php";
+$user_id = $_SESSION['user_id'] ;
 ?>
 
 
@@ -53,10 +54,19 @@ function createBOXES($chmapion_length)
     </script>";
     echo $js;
 }
+$query_check_if_additional_champs_bought = "SELECT * FROM USERS_PURCHASES WHERE user_id = :userID AND category = 'Champions' AND selected = 1";
+$stmt = $conn->prepare($query_check_if_additional_champs_bought);
+$stmt->bindParam(':userID', $user_id, PDO::PARAM_INT);
+$stmt->execute();
 
+if ($stmt->rowCount() > 0) {
+    $query = "SELECT CHAMPION_NAME, CHAMPION_HINT1, CHAMPION_HINT2, CHAMPION_HINT3 FROM CHAMPIONS ORDER BY RAND() LIMIT 1";
+    console_log("Z pakietem");
 
-
-$query = "SELECT CHAMPION_NAME, CHAMPION_HINT1, CHAMPION_HINT2, CHAMPION_HINT3 FROM CHAMPIONS ORDER BY RAND() LIMIT 1";
+} else {
+    $query = "SELECT CHAMPION_NAME, CHAMPION_HINT1, CHAMPION_HINT2, CHAMPION_HINT3 FROM CHAMPIONS WHERE champion_ID >= 1 AND champion_ID <= 141 ORDER BY RAND() LIMIT 1";
+    console_log("Bez pakietu");
+}
 $stmt = $conn->query($query);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $championName = $row['CHAMPION_NAME'];

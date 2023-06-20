@@ -23,3 +23,6 @@ function deleteAccount() {
 function logout() {
     return window.location.href = "logout.php";
 }
+function edit() {
+    return window.location.href = "../edit_account.php";
+}

@@ -54,7 +54,7 @@ $champion_guessed = $result['champion_guessed'];
 <body>
 <div class="profile">
     <button class="logout-button" onclick="logout()">Wyloguj</button>
-    <button class="edit-button">Edytuj konto</button>
+    <button class="edit-button" onclick="edit()">Edytuj konto</button>
     <button class="delete-button" onclick="showConfirmationDialog()">Usuń konto</button>
 
     <div id="overlay" onclick="hideConfirmationDialog()"></div>

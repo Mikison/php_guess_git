@@ -2,6 +2,7 @@
 session_start();
 include "../connection.php";
 include "../!NAVBAR/navbar-homeless-solo.php";
+include "../User.php";
 global $conn;
 
 if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
@@ -75,13 +76,8 @@ if (isset($_POST['update_points'])) {
     $checkResult = $conn->query($checkSql);
 
     if ($checkResult->rowCount() > 0) {
-        $updateSql = "UPDATE USERS_LEVELS SET experience_points = experience_points + $points WHERE user_id = '$userId'";
-
-        if ($conn->query($updateSql) === TRUE) {
-            echo "Punkty zaktualizowane.";
-            header("Location: ".$_SERVER['PHP_SELF']);
-            exit();
-        }
+        $USER = new User($userId);
+        $USER->updatePonts($points);
     } else {
         echo "Użytkownik nie istnieje.";
     }
