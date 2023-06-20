@@ -85,7 +85,12 @@ $user_points_to_spend = $result_statment['experience_points'];
             <div class="item">
                 <div class="item-icon" style="background-image: url('<?php echo $icon; ?>')"></div>
                 <div class="item-name"><?php echo $name; ?></div>
-                <div class="item-price"><?php echo $price; ?></div>
+                <?php
+                if (!checkIfAlreadyPurchased($user_id, $id)) {
+                    echo "<div class='item-price'> $price </div>";
+                }
+
+                ?>
                 <?php
                 $checkSelectedStatement = $conn->prepare("SELECT selected FROM USERS_PURCHASES WHERE user_id = :user_id AND item_id = :item_id");
                 $checkSelectedStatement->bindParam(':user_id', $user_id);

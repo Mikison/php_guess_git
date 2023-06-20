@@ -72,6 +72,7 @@ body {
     color: #fff;
     cursor: pointer;
     user-select: none;
+    margin-top: 15px;
     border: #fff 1px solid;
 }
 
