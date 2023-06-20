@@ -21,16 +21,15 @@ global $conn;
         <th>#</th>
         <th>Nickname</th>
         <th>Ogólna punktacja</th>
-        <th>Level</th>
     </tr>
     <?php
 
 
     // Pobranie danych z bazy danych
-    $sql = "SELECT UG.nickname, UL.all_time_experience_points, UL.level
-FROM USERS_GUESS UG
-JOIN USERS_LEVELS UL ON UG.user_id = UL.user_id
-ORDER BY UL.all_time_experience_points DESC
+    $sql = "SELECT users_guess.nickname, users_levels.all_time_experience_points
+            FROM users_guess
+            JOIN users_levels ON users_guess.user_id = users_levels.user_id
+            ORDER BY users_levels.all_time_experience_points DESC
 ";
     $result = $conn->query($sql);
 
@@ -42,10 +41,11 @@ ORDER BY UL.all_time_experience_points DESC
             echo "<td>" . $rank . "</td>";
             echo "<td>" . $row['nickname'] . "</td>";
             echo "<td>" . $row['all_time_experience_points'] . "</td>";
-            echo "<td>" . $row['level'] . "</td>";
             echo "</tr>";
             $rank++;
         }
+    } else {
+        echo "<tr><td colspan='3'>No data available</td></tr>";
     }
     ?>
 </table>
