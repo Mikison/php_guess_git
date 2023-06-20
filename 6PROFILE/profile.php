@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
+include "../updatePointsAndLevel.php";
 global $conn;
 
 

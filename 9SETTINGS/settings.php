@@ -2,6 +2,8 @@
 global $theme;
 session_start();
 include "../!NAVBAR/navbar.php";
+include "../updatePointsAndLevel.php";
+if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 ?>
 
 <!DOCTYPE html>

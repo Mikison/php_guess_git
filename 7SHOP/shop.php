@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 $user_id = $_SESSION['user_id'];
 include "../!NAVBAR/navbar.php";
 include "../connection.php";
+include "../updatePointsAndLevel.php";
 
 $sql = "SELECT COUNT(*) as count FROM USERS_PURCHASES WHERE item_id IN (1, 4)";
 $result = $conn->query($sql);
