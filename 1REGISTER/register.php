@@ -111,11 +111,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-//        if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $password)) {
-//            $errMsg = "Błąd! Pole hasło musi zawierać conajmniej 8 znaków, jedną dużą litere i jedną małą";
-//            generateJavaScript($errMsg, "red");
-//            exit();
-//        }
+       if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $password)) {
+           $errMsg = "Błąd! Pole hasło musi zawierać conajmniej 8 znaków, jedną dużą litere i jedną małą";
+           generateJavaScript($errMsg, "red");
+           exit();
+       }
 
         $sql_check_if_username_exists = "SELECT nickname FROM USERS_GUESS WHERE nickname = '$nickname'";
         $result = $conn->query($sql_check_if_username_exists);

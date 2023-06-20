@@ -9,6 +9,16 @@ if (!isset($_SESSION['user_id'])) header("Location: ../2LOGIN/login.php");
 
 $user_id = $_SESSION['user_id'];
 
+
+function console_log($data)
+{
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
+
 $stmt = $conn->prepare("SELECT isAdmin FROM USERS_GUESS WHERE user_id = :user_id");
 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -20,6 +30,7 @@ if ($stmt->rowCount() > 0) {
 
     if ($isAdmin !== 1) {
         header("Location: ../3PLAY/play.php");
+        console_log("nie admin");
     }
 }
 
