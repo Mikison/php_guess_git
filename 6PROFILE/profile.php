@@ -89,19 +89,7 @@ $champion_guessed = $result['champion_guessed'];
         <h2>Achievementy</h2>
 
         <div class="achievement">
-            <img src="achievement1.jpg" alt="Achievement 1">
-            <div>Achievement 1</div>
-        </div>
-
-        <div class="achievement">
-            <img src="achievement2.jpg" alt="Achievement 2">
-            <div>Achievement 2</div>
-        </div>
-
-        <div class="achievement">
-            <img src="achievement3.jpg" alt="Achievement 3">
-            <div>Achievement 3</div>
-        </div>
+            <div>Nie zrobione</div>
     </div>
 </div>
 </body>

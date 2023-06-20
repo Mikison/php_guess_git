@@ -18,12 +18,6 @@ pwShowHide.forEach(eyeIcon => {
         
     })
 })      
-//
-// links.forEach(link => {
-//     link.addEventListener("click", e => {
-//        e.preventDefault(); //preventing form submit
-//        forms.classList.toggle("show-signup");
-//     })
-// })
+
 
 

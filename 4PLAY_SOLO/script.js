@@ -103,11 +103,9 @@ function checkGuess(rightGuessString) {
     }
     if (guessString.toUpperCase() === rightGuessString.toUpperCase()) {
         updateDiv('Gratulacje! Udało ci się zgadnąć! Otrzymujesz ' + points + ' punktów', 'green');
-        audioDing.volume = parseFloat(getCookieValue('volume'));
-        audioDing.play();
         giveHintButton.setAttribute('disabled', 'true');
         createCookie('points', points, 5);
-        resetButton.style.display = 'inline-block'
+        resetButton.style.display = 'inline-block';
     } else {
 
         updatePoints('-15');
